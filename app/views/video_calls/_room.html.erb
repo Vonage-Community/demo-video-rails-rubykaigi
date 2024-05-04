@@ -1,0 +1,24 @@
+<div data-controller="dialog" data-action="click->dialog#backdropClose">
+  <dialog data-dialog-target="dialog">
+    <%= form_with url: invite_video_call_path(@video_call) do |form| %>
+      <%= form.label :participant_name, "Name" %>
+      <%= form.text_field :participant_name %>
+      <%= form.label :participant_phone_number, "Phone Number" %>
+      <%= form.text_field :participant_phone_number %>
+      <%= form.submit 'Send Invite' %>
+    <% end %>
+
+    <button type="button" data-action="dialog#close" autofocus>Close</button>
+  </dialog>
+
+  <button type="button" data-action="dialog#open">Invite Participant</button>
+</div>
+<%= turbo_frame_tag 'room', data: {
+    controller: "join-room",
+    join_room_api_key_value: @video_call.application_id,
+    join_room_session_id_value: @video_call.session_id,
+    join_room_participant_name_value: session[:participant_name],
+    join_room_token_value: @token 
+  } do %>
+  <%= tag.div id: "room-container", data: { action:"turbo:frame-render->join-room#connect" } %>
+<% end %>

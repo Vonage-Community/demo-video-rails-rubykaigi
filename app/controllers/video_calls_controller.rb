@@ -7,7 +7,7 @@ class VideoCallsController < ApplicationController
     @video_call = VideoCall.new(
       application_id: ENV['VONAGE_APPLICATION_ID'],
       uuid: SecureRandom.uuid,
-      **video_call_param
+      **video_call_params
     )
 
     begin
@@ -17,21 +17,38 @@ class VideoCallsController < ApplicationController
       if @video_call.save
         redirect_to @video_call
       else
-        render :new, status: :unprocessable_entity
+        flash[:alert] = "Unable to create video call."
+        render :new, status: :unprocessable_entity 
       end
     rescue => error
       logger.info(error)
+      flash[:alert] = "Unable to create video call."
       render :new, status: :unprocessable_entity
     end
   end
 
   def show
+    @video_call = VideoCall.find_by(uuid: params[:uuid])
+    @token = Vonage.video.generate_client_token(session_id: @video_call.session_id) if session[:participant_name].present?
   end
 
   def join
+    @video_call = VideoCall.find_by(uuid: params[:uuid])
+    session[:participant_name] = params[:participant_name]
+
+    redirect_to @video_call
   end
 
   def invite
+    message_text = "Hi #{params[:participant_name]}. Join my video call at #{ENV['SITE_URL']}/video_calls/#{params[:uuid]}"
+    message = Vonage.messaging.sms(message: message_text)
+    Vonage.messaging.send(
+      from: ENV['VONAGE_NUMBER'],
+      to: params[:participant_phone_number],
+      **message
+    )
+
+    head :ok
   end
 
   private
