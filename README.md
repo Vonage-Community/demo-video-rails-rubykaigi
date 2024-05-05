@@ -43,7 +43,7 @@ You'll need to set up a Vonage application to manage the capabilities and obtain
 
 3. Copy or move the `private.key` file you downloaded earlier the root directory of this demo application
 
-4. Copy or rename the `.env-sample` file to `.env` and update the file with your Vonage credentials:
+4. Copy or rename the `.env-example` file to `.env` and update the file with your Vonage credentials:
     - `VONAGE_APPLICATION_ID`. This is the Application ID you generated earlier when creating the Vonage Application
     - `VONAGE_NUMBER`. If you completed step 6 of Setting up your Vonage Application, this is the Vonage virtual numer you purchased, otherwise you can leave it as the same value as the sample or use some other valid alphanumeric value.
 
