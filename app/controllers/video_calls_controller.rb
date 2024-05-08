@@ -28,7 +28,7 @@ class VideoCallsController < ApplicationController
   end
 
   def show
-    @video_call = VideoCall.find_by(uuid: params[:uuid])
+    @video_call = VideoCall.find_by!(uuid: params[:uuid])
     @token = Vonage.video.generate_client_token(session_id: @video_call.session_id) if session[:participant_name].present?
   end
 
