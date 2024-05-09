@@ -40,7 +40,8 @@ class VideoCallsController < ApplicationController
   end
 
   def invite
-    message_text = "Hi #{params[:participant_name]}. Join my video call at #{ENV['SITE_URL']}/video_calls/#{params[:uuid]}"
+    site_url = Rails.env.local? ? ENV['SITE_URL'] : ENV['RENDER_EXTERNAL_URL']
+    message_text = "Hi #{params[:participant_name]}. Join my video call at #{site_url}/video_calls/#{params[:uuid]}"
     message = Vonage.messaging.sms(message: message_text)
     Vonage.messaging.send(
       from: ENV['VONAGE_NUMBER'],
