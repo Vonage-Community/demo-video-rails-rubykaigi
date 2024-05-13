@@ -10,11 +10,6 @@ export default class extends Controller {
   }
   
   connect() {
-    console.log(this.apiKeyValue);
-    console.log(this.sessionIdValue);
-    console.log(this.participantNameValue);
-    console.log(this.tokenValue);
-
     const room = new VideoExpress.Room({
       apiKey: this.apiKeyValue,
       sessionId: this.sessionIdValue,
@@ -23,7 +18,7 @@ export default class extends Controller {
       roomContainer: 'room-container',
       
     });
-    console.log(room);
+
     room.join();
   }
 }
